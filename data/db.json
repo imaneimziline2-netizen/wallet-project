@@ -19,6 +19,12 @@
       "user_id": 1,
       "name": "Portefeuille principal",
       "sold": 0
+    },
+    {
+      "id": 1771599241157,
+      "user_id": 1771582421628,
+      "name": "test",
+      "sold": 0
     }
   ]
 }

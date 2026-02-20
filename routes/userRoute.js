@@ -6,7 +6,7 @@ const {
 } = require("../controllers/userController");
 
 function userRoutes(req, res) {
-    console.log(req.method, req.url);  
+    console.log(req.method, req.url);
 
     if (req.method === "GET" && req.url === "/users") {
         return getUsers(req, res);

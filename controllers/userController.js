@@ -11,14 +11,14 @@ const createUser = (req, res) => {
 
     req.on("end", () => {
         const { name } = JSON.parse(body);  
-        const data = readData(); 
+        const data = readData();  
 
         const newUser = {
-            id: Date.now(),  
+            id: Date.now(), 
             name: name,
         };
         
-        data.users.push(newUser); 
+        data.users.push(newUser);  
         writeData(data);  
 
         res.writeHead(201, { "Content-Type": "application/json" });
@@ -28,9 +28,9 @@ const createUser = (req, res) => {
 
 
 const getUsers = (req, res) => {
-    const data = readData();  
+    const data = readData(); 
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(data.users)); 
+    res.end(JSON.stringify(data.users));  
 };
 
 
@@ -42,10 +42,10 @@ const updateUser = (req, res, id) => {
     });
 
     req.on("end", () => {
-        const { name } = JSON.parse(body);  
+        const { name } = JSON.parse(body); 
         const data = readData();  
 
-      
+       
         const user = data.users.find((u) => u.id == id);
         if (!user) {  
             res.writeHead(404, { "Content-Type": "application/json" });
@@ -57,7 +57,7 @@ const updateUser = (req, res, id) => {
         writeData(data);  
 
         res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(user));  
+        res.end(JSON.stringify(user)); 
     });
 };
 
@@ -66,17 +66,18 @@ const deleteUser = (req, res, id) => {
     const data = readData();  
     const userIndex = data.users.findIndex((u) => u.id == id); 
 
-    if (userIndex === -1) {  
+    if (userIndex === -1) { 
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "User not found" }));
         return;
     }
 
-   
+    // حذف المستخدم من المصفوفة
     data.users.splice(userIndex, 1);
-    writeData(data);  
+    writeData(data);  // حفظ التغييرات في db.json
+
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "User deleted" }));  
+    res.end(JSON.stringify({ message: "User deleted" }));  // إرسال رسالة تؤكد حذف المستخدم
 };
 
 module.exports = { createUser, getUsers, updateUser, deleteUser };

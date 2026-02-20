@@ -15,7 +15,7 @@ const createWallet = (req, res) => {
             id: Date.now(),
             user_id: userId,
             name: name,
-            sold: 0, // solde initial
+            sold: 0, 
         };
         data.wallets.push(newWallet);
         writeData(data);
@@ -45,7 +45,6 @@ const deposit = (req, res, id) => {
             res.end(JSON.stringify({ error: "Amount must be positive" }));
             return;
         }
-
         const data = readData();
         const wallet = data.wallets.find((w) => w.id === id);
 
