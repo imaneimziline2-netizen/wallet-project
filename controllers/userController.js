@@ -1,47 +1,82 @@
-let users =[
-    {id:1 ,name: "imane"},
-    {id:1 ,name: "hamza"}
-];
-// create
-// bach ndiro export l chi function lcho folder akhor
-// createUser hiya l function li adid lina user jdid
-//  body variable drnah f sever.js 
-exports.createUser =(req,res,body) => { 
-    const newUser = {
-        id: users.length +1,
-        name: body.name
-    };
-    // tableau fih  uesers kanzido fih newUser
-    users.push(newUser);
-    // writeHead katsayb lina harder li fih status code o content typ 
-res.writeHead(201,{'content-type':'application/json'});
-// katift lina nresprnce
-res.end(JSON.stringify(newUser));
-};
+// controllers/userController.js
+const { readData, writeData } = require("../data/store");
 
-// READ
-exports.getUser=(req,res)=>{
-    res.writeHead(200,{'content-type':'application/json'});
-res.end(JSON.stringify(users));
-};
 
-// Update
-exports.updateUser=(req,res,id,body)=>{
-   const user = users.find(u => u.id == id);
-    if(!user){
-        res.writeHead(404);
-        return res.end('user not found')
-    }
-    user.name = body.name;
-    res.writeHead(200,{
-        'content-typ':'application/json'
+const createUser = (req, res) => {
+    let body = "";
+
+    req.on("data", (chunk) => {
+        body += chunk;
     });
-    res.end(JSON.stringify(user))
+
+    req.on("end", () => {
+        const { name } = JSON.parse(body);  
+        const data = readData(); 
+
+        const newUser = {
+            id: Date.now(),  
+            name: name,
+        };
+        
+        data.users.push(newUser); 
+        writeData(data);  
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(newUser));  
+    });
 };
 
-// delet
-exports.deletUser =(req,res,id)=>{
-    users = users.filter(u=>u.id != id);
-    res.writeHead(200);
-    res.end("User deleted")
-}
+
+const getUsers = (req, res) => {
+    const data = readData();  
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(data.users)); 
+};
+
+
+const updateUser = (req, res, id) => {
+    let body = "";
+    
+    req.on("data", (chunk) => {
+        body += chunk;
+    });
+
+    req.on("end", () => {
+        const { name } = JSON.parse(body);  
+        const data = readData();  
+
+      
+        const user = data.users.find((u) => u.id == id);
+        if (!user) {  
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "User not found" }));
+            return;
+        }
+
+        user.name = name;  
+        writeData(data);  
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(user));  
+    });
+};
+
+
+const deleteUser = (req, res, id) => {
+    const data = readData();  
+    const userIndex = data.users.findIndex((u) => u.id == id); 
+
+    if (userIndex === -1) {  
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "User not found" }));
+        return;
+    }
+
+   
+    data.users.splice(userIndex, 1);
+    writeData(data);  
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "User deleted" }));  
+};
+
+module.exports = { createUser, getUsers, updateUser, deleteUser };

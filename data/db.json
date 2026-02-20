@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": 1771582421628,
+      "name": "zenb"
+    },
+    {
+      "id": 1771582431918,
+      "name": "zineb"
+    },
+    {
+      "id": 1771582439622,
+      "name": "houssam"
+    }
+  ],
+  "wallets": [
+    {
+      "id": 123456,
+      "user_id": 1,
+      "name": "Portefeuille principal",
+      "sold": 0
+    }
+  ]
+}
