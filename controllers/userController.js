@@ -71,13 +71,11 @@ const deleteUser = (req, res, id) => {
         res.end(JSON.stringify({ error: "User not found" }));
         return;
     }
-
-    // حذف المستخدم من المصفوفة
     data.users.splice(userIndex, 1);
-    writeData(data);  // حفظ التغييرات في db.json
+    writeData(data); 
 
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "User deleted" }));  // إرسال رسالة تؤكد حذف المستخدم
+    res.end(JSON.stringify({ message: "User deleted" })); 
 };
 
 module.exports = { createUser, getUsers, updateUser, deleteUser };
